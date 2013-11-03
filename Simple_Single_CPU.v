@@ -2,17 +2,17 @@
 //--------------------------------------------------------------------------------
 //Version:     1
 //--------------------------------------------------------------------------------
-//Writer:      
+//Writer:
 //----------------------------------------------
-//Date:        
+//Date:
 //----------------------------------------------
-//Description: 
+//Description:
 //--------------------------------------------------------------------------------
 module Simple_Single_CPU(
         clk_i,
-		rst_n
-		);
-		
+        rst_n
+        );
+
 //I/O port
 input         clk_i;
 input         rst_n;
@@ -43,22 +43,22 @@ MUX_2to1 #(.size(32)) Mux_Return(
         );
 
 ProgramCounter PC(
-        .clk_i(clk_i),      
-	    .rst_n (rst_n),     
-	    .pc_in_i(pc) ,   
-	    .pc_out_o(pco) 
-	    );
-	
+        .clk_i(clk_i),
+        .rst_n(rst_n),
+        .pc_in_i(pc),
+        .pc_out_o(pco)
+        );
+
 Adder Adder1(
-        .src1_i(32'd4),     
-	    .src2_i(pco),     
-	    .sum_o(pcn)    
-	    );
-	
+        .src1_i(32'd4),
+        .src2_i(pco),
+        .sum_o(pcn)
+        );
+
 Instr_Memory IM(
-        .pc_addr_i(pco),  
-	    .instr_o(instr)    
-	    );
+        .pc_addr_i(pco),
+        .instr_o(instr)
+        );
 
 MUX_4to1 #(.size(5)) Mux_Write_Reg(
         .data0_i(instr[20:16]),
@@ -68,47 +68,47 @@ MUX_4to1 #(.size(5)) Mux_Write_Reg(
         .select_i(regd),
         .data_o(regtow)
         );
-		
+
 Reg_File RF(
-        .clk_i(clk_i),      
-	    .rst_n(rst_n) ,     
-        .RSaddr_i(instr[25:21]) ,  
-        .RTaddr_i(instr[20:16]) ,  
-        .RDaddr_i(regtow) ,  
-        .RDdata_i(wdata)  , 
+        .clk_i(clk_i),
+        .rst_n(rst_n),
+        .RSaddr_i(instr[25:21]),
+        .RTaddr_i(instr[20:16]),
+        .RDaddr_i(regtow),
+        .RDdata_i(wdata),
         .RegWrite_i(regw),
-        .RSdata_o(rdata1) ,  
-        .RTdata_o(rdata2)   
+        .RSdata_o(rdata1),
+        .RTdata_o(rdata2)
         );
-	
+
 Decoder Decoder(
-        .instr_op_i(instr[31:26]), 
-	    .RegWrite_o(regw), 
-	    .ALU_op_o(aluop),   
-	    .ALUSrc_o(alusrc),   
-	    .RegDst_o(regd),   
-		.Branch_o(branch),
-		.sign_o(sign),
-		.BranchType_o(btype),
-	    .Jump_o(j),
-	    .MemRead_o(memr),
-	    .MemWrite_o(memw),
-	    .MemtoReg_o(mtor)
-	    );
+        .instr_op_i(instr[31:26]),
+        .RegWrite_o(regw),
+        .ALU_op_o(aluop),
+        .ALUSrc_o(alusrc),
+        .RegDst_o(regd),
+        .Branch_o(branch),
+        .sign_o(sign),
+        .BranchType_o(btype),
+        .Jump_o(j),
+        .MemRead_o(memr),
+        .MemWrite_o(memw),
+        .MemtoReg_o(mtor)
+        );
 
 ALU_Ctrl AC(
-        .funct_i(instr[5:0]),   
-        .ALUOp_i(aluop),   
+        .funct_i(instr[5:0]),
+        .ALUOp_i(aluop),
         .ALUCtrl_o(aluctrl),
         .BonusCtrl_o(bonusctrl),
-        .ALUShift_o(alush) 
+        .ALUShift_o(alush)
         );
 
 ShiftAmount_Extend SA(
         .data_i(instr[10:6]),
         .data_o(SAex)
         );
-	
+
 Sign_Extend SE(
         .data_i(instr[15:0]),
         .sign_i(sign),
@@ -127,20 +127,20 @@ MUX_2to1 #(.size(32)) Mux_ALUSrc(
         .data1_i(signex),
         .select_i(alusrc),
         .data_o(src2)
-        );	
-		
+        );
+
 alu ALU(
-		.rst_n(rst_n),
+        .rst_n(rst_n),
         .src1(src1),
-	    .src2(src2),
-	    .ALU_control(aluctrl),
-	    .bonus_control(bonusctrl),
-	    .result(aluresult),
-		.zero(zero),
-		.cout(cout),
-		.overflow(overflow)
-	    );
-	    
+        .src2(src2),
+        .ALU_control(aluctrl),
+        .bonus_control(bonusctrl),
+        .result(aluresult),
+        .zero(zero),
+        .cout(cout),
+        .overflow(overflow)
+        );
+
 MUX_4to1 #(.size(32)) Mux_WReg_Src(
         .data0_i(aluresult),
         .data1_i(mdata),
@@ -151,12 +151,12 @@ MUX_4to1 #(.size(32)) Mux_WReg_Src(
         );
 
 Data_Memory DM(
-	.clk_i(clk_i),
-	.addr_i(aluresult),
-	.data_i(rdata2),
-	.MemRead_i(memr),
-	.MemWrite_i(memw),
-	.data_o(mdata)
+    .clk_i(clk_i),
+    .addr_i(aluresult),
+    .data_i(rdata2),
+    .MemRead_i(memr),
+    .MemWrite_i(memw),
+    .data_o(mdata)
     );
 
 MUX_4to1 #(.size(1)) Result_Zero_Mux(
@@ -166,19 +166,19 @@ MUX_4to1 #(.size(1)) Result_Zero_Mux(
         .data3_i(~zero),
         .select_i(btype),
         .data_o(rzmux)
-        );	
-		
+        );
+
 Adder Adder2(
-        .src1_i(pcn),     
-	    .src2_i(sl2data),     
-	    .sum_o(pcb)      
-	    );
-		
+        .src1_i(pcn),
+        .src2_i(sl2data),
+        .sum_o(pcb)
+        );
+
 Shift_Left_Two_32 Shifter(
         .data_i(signex),
         .data_o(sl2data)
-        ); 		
-		
+        );
+        
 MUX_2to1 #(.size(32)) Mux_PC_Source(
         .data0_i(pcn),
         .data1_i(pcb),
@@ -194,6 +194,5 @@ MUX_2to1 #(.size(32)) Mux_Jump(
         );
 
 endmodule
-		  
 
 

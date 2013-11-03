@@ -1,50 +1,50 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    17:31:32 08/18/2010 
-// Design Name: 
-// Module Name:    Data_Memory 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
+// Company:
+// Engineer:
 //
-// Dependencies: 
+// Create Date:    17:31:32 08/18/2010
+// Design Name:
+// Module Name:    Data_Memory
+// Project Name:
+// Target Devices:
+// Tool versions:
+// Description:
 //
-// Revision: 
+// Dependencies:
+//
+// Revision:
 // Revision 0.01 - File Created
-// Additional Comments: 
+// Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
 module Data_Memory
 (
-	clk_i,
-	addr_i,
-	data_i,
-	MemRead_i,
-	MemWrite_i,
-	data_o
+    clk_i,
+    addr_i,
+    data_i,
+    MemRead_i,
+    MemWrite_i,
+    data_o
 );
 
 // Interface
-input				clk_i;
-input	[31:0]		addr_i;
-input	[31:0]		data_i;
-input				MemRead_i;
-input				MemWrite_i;
-output	[31:0] 		data_o;
+input            clk_i;
+input    [31:0]  addr_i;
+input    [31:0]  data_i;
+input            MemRead_i;
+input            MemWrite_i;
+output    [31:0] data_o;
 
 // Signals
-reg		[31:0]		data_o;
+reg        [31:0]data_o;
 
 // Memory
-reg		[7:0]		Mem 			[0:127];	// address: 0x00~0x80
-integer				i;
+reg        [7:0] Mem[0:127];    // address: 0x00~0x80
+integer          i;
 
 // For Testbench to debug
-wire	[31:0]		memory			[0:31];
+wire    [31:0]   memory[0:31];
 assign  memory[0] = {Mem[3], Mem[2], Mem[1], Mem[0]};
 assign  memory[1] = {Mem[7], Mem[6], Mem[5], Mem[4]};
 assign  memory[2] = {Mem[11], Mem[10], Mem[9], Mem[8]};
@@ -79,23 +79,23 @@ assign  memory[30] = {Mem[123], Mem[122], Mem[121], Mem[120]};
 assign  memory[31] = {Mem[127], Mem[126], Mem[125], Mem[124]};
 
 initial begin
-	for(i=0; i<128; i=i+1)
-		Mem[i] = 8'b0;
+    for(i=0; i<128; i=i+1)
+        Mem[i] = 8'b0;
 
 end 
 
 always@(posedge clk_i) begin
     if(MemWrite_i) begin
-		Mem[addr_i+3] <= data_i[31:24];
-		Mem[addr_i+2] <= data_i[23:16];
-		Mem[addr_i+1] <= data_i[15:8];
-		Mem[addr_i]   <= data_i[7:0];
-	end
+        Mem[addr_i+3] <= data_i[31:24];
+        Mem[addr_i+2] <= data_i[23:16];
+        Mem[addr_i+1] <= data_i[15:8];
+        Mem[addr_i]   <= data_i[7:0];
+    end
 end
 
 always@(addr_i or MemRead_i) begin
-	if(MemRead_i)
-		data_o = {Mem[addr_i+3], Mem[addr_i+2], Mem[addr_i+1], Mem[addr_i]};
+    if(MemRead_i)
+        data_o = {Mem[addr_i+3], Mem[addr_i+2], Mem[addr_i+1], Mem[addr_i]};
 end
 
 endmodule

@@ -3,20 +3,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Student: ???
 // ID: 0016014
-// 
-// Create Date:    10:58:01 10/10/2011 
-// Design Name: 
-// Module Name:    alu_top 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
 //
-// Dependencies: 
+// Create Date:    10:58:01 10/10/2011
+// Design Name:
+// Module Name:    alu_top
+// Project Name:
+// Target Devices:
+// Tool versions:
+// Description:
 //
-// Revision: 
+// Dependencies:
+//
+// Revision:
 // Revision 0.01 - File Created
-// Additional Comments: 
+// Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +30,7 @@ module alu_top(
                operation,  //operation      (input)
                //bonus,      //bonus          (input)
                result,     //1 bit result   (output)
-               cout,       //1 bit carry out(output)
+               cout        //1 bit carry out(output)
                );
 
 input         src1;
@@ -49,7 +49,7 @@ reg           result;
 reg           cout;
 
 always@(*) begin
-    cout <= ((src1^A_invert)&(src2^B_invert)) | ((src1^A_invert)&cin) | ((src2^B_invert)&cin);
+    cout <= ((src1^A_invert) & (src2^B_invert)) | ((src1^A_invert)&cin) | ((src2^B_invert)&cin);
     case(operation[1:0])
         2'b00: result <= (src1^A_invert) & (src2^B_invert);
         2'b01: result <= (src1^A_invert) | (src2^B_invert);
