@@ -30,10 +30,7 @@ reg     [size-1:0] data_o;
 //Main function
 
 always@(*) begin
-    case(select_i)
-        1'b1: data_o <= data1_i;
-        1'b0: data_o <= data0_i;
-    endcase
+    data_o <= select_i ? data1_i : data0_i;
 end
 
 endmodule

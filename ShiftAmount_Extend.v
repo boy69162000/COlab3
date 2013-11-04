@@ -21,7 +21,7 @@ output  [32-1:0] data_o;
 //Internal Signals
 reg     [32-1:0] data_o;
 
-//Sign extended
+//Sign extended (actually, fill zero)
 always@(*) begin
     data_o <= {27'd0, data_i};
 end

@@ -40,166 +40,28 @@ output         MemWrite_o;
 output [2-1:0] MemtoReg_o;
 
 //Internal Signals
-reg    [3-1:0] ALU_op_o;
 reg            ALUSrc_o;
-reg            RegWrite_o;
-reg    [2-1:0] RegDst_o;
-reg            Branch_o;
-reg            sign_o;
-reg    [2-1:0] BranchType_o;
-reg            Jump_o;
-reg            MemRead_o;
-reg            MemWrite_o;
-reg    [2-1:0] MemtoReg_o;
+
+reg [14:0]control_o;
+
+assign { RegWrite_o, ALU_op_o, RegDst_o, Branch_o, sign_o,
+         BranchType_o, Jump_o, MemRead_o, MemWrite_o, MemtoReg_o } = control_o;
 
 //Main Function
 always@(*) begin
     case(instr_op_i)
-        6'b000011: begin
-            RegWrite_o   <= 1'b1;
-            ALU_op_o     <= 3'b011;
-            Branch_o     <= 1'b0;
-            RegDst_o     <= 2'b10;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b00;
-            Jump_o       <= 1'b1;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b11;
-        end
-        6'b100011: begin
-            RegWrite_o   <= 1'b1;
-            ALU_op_o     <= 3'b110;
-            Branch_o     <= 1'b0;
-            RegDst_o     <= 2'b00;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b00;
-            Jump_o       <= 1'b0;
-            MemRead_o    <= 1'b1;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b01;
-        end
-        6'b101011: begin
-            RegWrite_o   <= 1'b0;
-            ALU_op_o     <= 3'b110;
-            Branch_o     <= 1'b0;
-            RegDst_o     <= 2'b00;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b00;
-            Jump_o       <= 1'b0;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b1;
-            MemtoReg_o   <= 2'b00;
-        end
-        6'b000010: begin
-            RegWrite_o   <= 1'b0;
-            ALU_op_o     <= 3'b011;
-            Branch_o     <= 1'b0;
-            RegDst_o     <= 2'b01;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b00;
-            Jump_o       <= 1'b1;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b00;
-        end
-        6'b000111: begin
-            RegWrite_o   <= 1'b0;
-            ALU_op_o     <= 3'b011;
-            Branch_o     <= 1'b1;
-            RegDst_o     <= 2'b01;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b01;
-            Jump_o       <= 1'b0;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b00;
-        end
-        6'b000101: begin 
-            RegWrite_o   <= 1'b0;
-            ALU_op_o     <= 3'b011;
-            Branch_o     <= 1'b1;
-            RegDst_o     <= 2'b01;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b11;
-            Jump_o       <= 1'b0;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b00;
-        end
-        6'b000001: begin 
-            RegWrite_o   <= 1'b0;
-            ALU_op_o     <= 3'b011;
-            Branch_o     <= 1'b1;
-            RegDst_o     <= 2'b01;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b10;
-            Jump_o       <= 1'b0;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b00;
-        end
-        6'b000100: begin 
-            RegWrite_o   <= 1'b0;
-            ALU_op_o     <= 3'b011;
-            Branch_o     <= 1'b1;
-            RegDst_o     <= 2'b01;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b00;
-            Jump_o       <= 1'b0;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b00;
-        end
-        6'b001000: begin
-            RegWrite_o   <= 1'b1;
-            ALU_op_o     <= 3'b110;
-            Branch_o     <= 1'b0;
-            RegDst_o     <= 2'b00;
-            sign_o       <= 1'b1;
-            BranchType_o <= 2'b00;
-            Jump_o       <= 1'b0;
-            MemRead_o    <= 1'b0;
-            MemWrite_o   <= 1'b0;
-            MemtoReg_o   <= 2'b00;
-        end
-        6'b001111: begin
-            RegWrite_o    <= 1'b1;
-            ALU_op_o      <= 3'b110;
-            Branch_o      <= 1'b0;
-            RegDst_o      <= 2'b00;
-            sign_o        <= 1'b1;
-            BranchType_o  <= 2'b00;
-            Jump_o        <= 1'b0;
-            MemRead_o     <= 1'b0;
-            MemWrite_o    <= 1'b0;
-            MemtoReg_o    <= 2'b00;
-        end
-        6'b001101: begin
-            RegWrite_o    <= 1'b1;
-            ALU_op_o      <= 3'b101;
-            Branch_o      <= 1'b0;
-            RegDst_o      <= 2'b00;
-            sign_o        <= 1'b0;
-            BranchType_o  <= 2'b00;
-            Jump_o        <= 1'b0;
-            MemRead_o     <= 1'b0;
-            MemWrite_o    <= 1'b0;
-            MemtoReg_o    <= 2'b00;
-        end
-        default: begin
-            RegWrite_o    <= 1'b1;
-            ALU_op_o      <= 3'b000;
-            ALUSrc_o      <= 1'b0;
-            RegDst_o      <= 2'b01;
-            Branch_o      <= 1'b0;
-            sign_o        <= 1'b1;
-            BranchType_o  <= 2'b00;
-            Jump_o        <= 1'b0;
-            MemRead_o     <= 1'b0;
-            MemWrite_o    <= 1'b0;
-            MemtoReg_o    <= 2'b00;
-        end
+        6'b000011: control_o <= 1_011_10_01_00_100_11;    // jal
+        6'b100011: control_o <= 1_110_00_01_00_010_11;    // lw
+        6'b101011: control_o <= 0_110_00_01_00_001_00;    // st
+        6'b000010: control_o <= 0_011_01_01_00_100_00;    // jump
+        6'b000111: control_o <= 0_011_01_11_01_000_00;    // bgt
+        6'b000101: control_o <= 0_011_01_11_11_000_00;    // bnez
+        6'b000001: control_o <= 0_011_01_11_10_000_00;    // bgez
+        6'b000100: control_o <= 0_011_01_11_00_000_00;    // beq
+        6'b001000: control_o <= 1_110_00_01_00_000_00;    // addi
+        6'b001111: control_o <= 1_110_00_01_00_000_00;    // lui
+        6'b001101: control_o <= 1_101_00_00_00_000_00;    // ori
+        default:   control_o <= 1_000_01_01_00_000_00;    // R-type
     endcase
 
     ALUSrc_o <= instr_op_i[3] | instr_op_i[5];

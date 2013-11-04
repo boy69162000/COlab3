@@ -34,13 +34,13 @@ input    [31:0]  addr_i;
 input    [31:0]  data_i;
 input            MemRead_i;
 input            MemWrite_i;
-output    [31:0] data_o;
+output   [31:0]  data_o;
 
 // Signals
-reg        [31:0]data_o;
+reg      [31:0]  data_o;
 
 // Memory
-reg        [7:0] Mem[0:127];    // address: 0x00~0x80
+reg      [7:0]   Mem[0:127];    // address: 0x00~0x80
 integer          i;
 
 // For Testbench to debug
