@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1ns/1ps
 `define CYCLE_TIME 10			
-`define END_COUNT 500
+`define END_COUNT 50
 
 
 
@@ -64,13 +64,13 @@ parameter [6-1:0] FUNC_JR  = 6'b001000;
 //Other register declaration
 reg [31:0] instruction;
 reg [31:0] register_file[31:0];
-reg		[7:0]		mem_file 			[0:127];
+reg [7:0]  mem_file [0:127];
 reg [31:0] pc;
 reg [4:0]  rs,rt,rd;
 reg [31:0] addr,data;
 integer i;
 
-wire	[31:0]		memory			[0:31];
+wire [31:0] memory[0:31];
 assign  memory[0] = {mem_file[3], mem_file[2], mem_file[1], mem_file[0]};
 assign  memory[1] = {mem_file[7], mem_file[6], mem_file[5], mem_file[4]};
 assign  memory[2] = {mem_file[11], mem_file[10], mem_file[9], mem_file[8]};
@@ -165,7 +165,7 @@ initial  begin
 						register_file[rd] = register_file[rs] | register_file[rt] ;
 					end
 					FUNC_SLT:begin
-						register_file[rd] = (register_file[rs] < register_file[rt]) ?(32'd1):(32'd0) ;
+						register_file[rd] = ($signed(register_file[rs]) < $signed(register_file[rt])) ?(32'd1):(32'd0) ;
 					end
 					FUNC_SLLV:begin
 						register_file[rd] = register_file[rt] << register_file[rs];
@@ -265,8 +265,8 @@ initial  begin
 	
 		
 		@(negedge CLK);
-		// after the register file of design is updated
-		// compare the register file that are 	
+		// after the pc of design is updated
+		// compare the pc value that are
 		if(cpu.PC.pc_out_o !== pc)begin
 			case(instruction[31:26])
 				OP_RTYPE:begin
@@ -301,7 +301,7 @@ initial  begin
 			$stop;
 		end
 		
-		// Check the register file
+		// Check the register &  memory file
 		// It should be the same with the register file in the design
 		for(i=0; i<32; i=i+1)begin
 			if(cpu.RF.Reg_File[i] !== register_file[i] || cpu.DM.memory[i] !== memory[i])begin
@@ -377,12 +377,16 @@ initial  begin
 						$display("ERROR: JAL  instruction fail");
 					end
 				endcase
-				$display("Register %d contains wrong answer",i);
-				$display("The correct value is %d ",register_file[i]);
-				$display("Your wrong value is %d ",cpu.RF.Reg_File[i]);
-				$display("Memmory %d contains wrong answer",i);
-				$display("The correct value is %d ",memory[i]);
-				$display("Your wrong value is %d ",cpu.DM.memory[i]);
+				if(cpu.RF.Reg_File[i] !== register_file[i])begin
+					$display("Register %d contains wrong answer",i);
+					$display("The correct value is %d ",register_file[i]);
+					$display("Your wrong value is %d ",cpu.RF.Reg_File[i]);
+				end
+				if(cpu.DM.memory[i] !== memory[i])begin
+					$display("Memory %d contains wrong answer",i);
+					$display("The correct value is %d ",memory[i]);
+					$display("Your wrong value is %d ",cpu.DM.memory[i]);
+				end
 				$stop;
 			end
 		end
