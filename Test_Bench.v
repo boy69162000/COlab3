@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1ns/1ps
 `define CYCLE_TIME 10			
-`define END_COUNT 50
+`define END_COUNT 500
 
 
 
@@ -129,13 +129,8 @@ end
 end
 
 initial  begin
-<<<<<<< HEAD
  	$readmemb("CO_Lab3_test_data1.txt", cpu.IM.Instr_Mem);  //Read instruction from "CO_P2_test_data1.txt" 
  	//$readmemb("CO_Lab3_bonus.txt", cpu.IM.Instr_Mem);  //Read instruction from "CO_P2_test_data1.txt" 
-=======
- 	//$readmemb("CO_Lab3_test_data1.txt", cpu.IM.Instr_Mem);  //Read instruction from "CO_P2_test_data1.txt" 
- 	$readmemb("CO_Lab3_bonus.txt", cpu.IM.Instr_Mem);  //Read instruction from "CO_P2_test_data1.txt" 
->>>>>>> ae31aa286a5b76518d0647de6543dd7900a9113d
     handle = $fopen("CO_Lab3_Result.txt");
 	
 	CLK = 0;
