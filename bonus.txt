@@ -36,9 +36,9 @@ $end_swap:
 ; inner's back edge
 addi $t3, $t3, 4   ; j++
 slt $t4, $t3, $t7  ; j < 5
-bgez $t4, $inner
+bgt $t4, $inner
 
 ; outer's back edge
 addi $t2, $t2, 4   ; i++
 slt $t4, $t2, $t1  ; i < 4
-bgez $t4, $outer
+bgt $t4, $outer
