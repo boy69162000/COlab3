@@ -50,18 +50,18 @@ assign { RegWrite_o, ALU_op_o, RegDst_o, Branch_o, sign_o,
 //Main Function
 always@(*) begin
     case(instr_op_i)
-        6'b000011: control_o <= 1_011_10_01_00_100_11;    // jal
-        6'b100011: control_o <= 1_110_00_01_00_010_11;    // lw
-        6'b101011: control_o <= 0_110_00_01_00_001_00;    // st
-        6'b000010: control_o <= 0_011_01_01_00_100_00;    // jump
-        6'b000111: control_o <= 0_011_01_11_01_000_00;    // bgt
-        6'b000101: control_o <= 0_011_01_11_11_000_00;    // bnez
-        6'b000001: control_o <= 0_011_01_11_10_000_00;    // bgez
-        6'b000100: control_o <= 0_011_01_11_00_000_00;    // beq
-        6'b001000: control_o <= 1_110_00_01_00_000_00;    // addi
-        6'b001111: control_o <= 1_110_00_01_00_000_00;    // lui
-        6'b001101: control_o <= 1_101_00_00_00_000_00;    // ori
-        default:   control_o <= 1_000_01_01_00_000_00;    // R-type
+        6'b000011: control_o <= 15'b1_011_10_01_00_100_11;    // jal
+        6'b100011: control_o <= 15'b1_110_00_01_00_010_01;    // lw
+        6'b101011: control_o <= 15'b0_110_00_01_00_001_00;    // st
+        6'b000010: control_o <= 15'b0_011_01_01_00_100_00;    // jump
+        6'b000111: control_o <= 15'b0_011_01_11_01_000_00;    // bgt
+        6'b000101: control_o <= 15'b0_011_01_11_11_000_00;    // bnez
+        6'b000001: control_o <= 15'b0_011_01_11_10_000_00;    // bgez
+        6'b000100: control_o <= 15'b0_011_01_11_00_000_00;    // beq
+        6'b001000: control_o <= 15'b1_110_00_01_00_000_00;    // addi
+        6'b001111: control_o <= 15'b1_110_00_01_00_000_00;    // lui
+        6'b001101: control_o <= 15'b1_101_00_00_00_000_00;    // ori
+        default:   control_o <= 15'b1_000_01_01_00_000_00;    // R-type
     endcase
 
     ALUSrc_o <= instr_op_i[3] | instr_op_i[5];
